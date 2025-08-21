@@ -1,0 +1,180 @@
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .admin-sidebar {
+        width: 225px;
+        background: linear-gradient(180deg, #ff6a00, #ff9500);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        color: white;
+        padding: 20px 0;
+    }
+
+    .sidebar-logo {
+        padding: 0 20px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .sidebar-logo img {
+        width: 75px;
+        height: 70px;
+        border-radius: 50%;
+        border: 3px solid white;
+    }
+
+    .sidebar-menu {
+        list-style: none;
+        padding: 0 15px;
+    }
+
+    .sidebar-menu a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 12px 20px;
+        margin: 8px 0;
+        border-radius: 8px;
+        font-size: 17px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-menu a.active {
+        background: rgba(255, 255, 255, 0.25);
+        transform: translateX(5px);
+    }
+
+    .sidebar-menu a:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateX(5px);
+    }
+
+    /* Mobile menu button */
+    .menu-toggle {
+        display: none;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1000;
+        background: #ff6a00;
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive styles */
+    @media (max-width: 992px) {
+        .admin-sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .admin-sidebar.active {
+            transform: translateX(0);
+        }
+
+        .menu-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .admin-sidebar {
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .sidebar-menu a {
+            font-size: 15px;
+            padding: 10px 15px;
+        }
+    }
+</style>
+
+<!-- Add menu toggle button -->
+<button class="menu-toggle" id="menuToggle">
+    <i class="fas fa-bars"></i>
+</button>
+
+<!-- Add overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<aside class="admin-sidebar">
+    <div class="sidebar-logo">
+        <a href="/admin/dashboard"><img src="/assets/images/logo2.png" alt="Admin"></a>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="/admin/media-titles" class="<%= activePage === 'media-titles' ? 'active' : '' %>">Media Titles</a>
+        <a href="/admin/media" class="<%= activePage === 'media' ? 'active' : '' %>">Media</a>
+        <a href="/admin/testimonials" class="<%= activePage === 'testimonials' ? 'active' : '' %>">Testimonials</a>
+        <a href="/admin/products" class="<%= activePage === 'products' ? 'active' : '' %>">Products</a>
+        <a href="/admin/rajasthan-centers" class="<%= activePage === 'rajasthan-centers' ? 'active' : '' %>">Rajasthan
+            Centers</a>
+    </nav>
+</aside>
+
+<script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.admin-sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    // Toggle sidebar
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close sidebar when clicking overlay
+    overlay.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
+    // Close sidebar when clicking menu items on mobile
+    document.querySelectorAll('.sidebar-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 992) {
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    });
+
+    // Handle resize
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 992) {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    });
+</script>

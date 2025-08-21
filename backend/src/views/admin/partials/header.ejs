@@ -1,0 +1,289 @@
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    .admin-header {
+        height: 70px;
+        background: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 0 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 225px;
+        z-index: 100;
+    }
+
+    .header-title {
+        color: #ff6a00;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .admin-header .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto;
+    }
+
+    .admin-header .user-info img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+    }
+
+    .admin-header .user-info span {
+        font-size: 14px;
+        color: #555;
+    }
+
+    .profile-section {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .admin-info {
+        text-align: right;
+        margin-right: 10px;
+    }
+
+    .admin-name {
+        color: #333;
+        font-weight: 549;
+        font-size: 15px;
+    }
+
+    .admin-role {
+        color: #666;
+        font-size: 12px;
+    }
+
+    .profile-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .profile-image:hover {
+        transform: scale(1.05);
+    }
+
+    .profile-dropdown {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        min-width: 180px;
+        display: none;
+        z-index: 1000;
+        border: 1px solid #f0f0f0;
+        padding: 8px 0;
+    }
+
+    .profile-dropdown.show {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    .profile-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        color: #333;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        font-size: 14px;
+    }
+
+    .profile-dropdown a i {
+        color: #ff6a00;
+        font-size: 16px;
+        width: 20px;
+        text-align: center;
+    }
+
+    .profile-dropdown a:hover {
+        background: #fff5f0;
+        color: #ff6a00;
+        padding-left: 24px;
+    }
+
+    .divider {
+        height: 1px;
+        background: #f0f0f0;
+        margin: 8px 0;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .admin-header {
+            left: 0;
+            padding: 0 15px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .admin-info {
+            display: none;
+        }
+
+        .profile-image {
+            width: 35px;
+            height: 35px;
+        }
+
+        .profile-dropdown {
+            right: -10px;
+            min-width: 160px;
+        }
+
+        .profile-dropdown a {
+            padding: 10px 15px;
+            font-size: 13px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .admin-header {
+            height: 60px;
+        }
+
+        .header-title {
+            max-width: 150px;
+            font-size: 16px;
+        }
+
+        .profile-image {
+            width: 32px;
+            height: 32px;
+        }
+    }
+</style>
+
+<header class="admin-header">
+    <h1 class="header-title">Trycam Healthcare Center</h1>
+    <div class="profile-section">
+        <div class="admin-info">
+            <div class="admin-name">
+                <%=admin.name%>
+            </div>
+        </div>
+        <img src="/uploads/<%=admin.image%>" alt="Profile" class="profile-image" id="profileImage">
+        <div class="profile-dropdown" id="profileDropdown">
+            <a href="/admin/edit-profile">
+                <i class="fas fa-user-edit"></i>
+                Edit Profile
+            </a>
+            <div class="divider"></div>
+            <a href="#" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</header>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.getElementById('profileImage').addEventListener('click', function () {
+        const dropdown = document.getElementById('profileDropdown');
+        dropdown.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+        const dropdown = document.getElementById('profileDropdown');
+        const profileImage = document.getElementById('profileImage');
+
+        if (!profileImage.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+</script>
+<script>
+    document.getElementById('logoutBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        fetch('/admin/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+            .then(async res => {
+                const data = await res.json();
+
+                if (!res.ok) {
+                    Swal.fire({
+                        toast: true,
+                        position: 'top',
+                        icon: 'error',
+                        title: data.message || 'Logout failed',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        timerProgressBar: true,
+                    });
+                    throw new Error(data.message || 'Logout failed');
+                }
+
+                Swal.fire({
+                    toast: true,
+                    position: 'top',
+                    icon: 'success',
+                    title: data.message || 'Logged out successfully',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    // timerProgressBar: true,
+                });
+
+                setTimeout(() => {
+                    window.location.href = '/admin/login';
+                }, 1500);
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire({
+                    toast: true,
+                    position: 'top',
+                    icon: 'error',
+                    title: err.message,
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                });
+            });
+    });
+
+</script>

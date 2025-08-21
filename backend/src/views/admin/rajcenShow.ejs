@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="/assets/images/logo2.png">
+    <title>Trycam - Admin Panel</title>
+    <style>
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-content {
+            flex: 1;
+            margin-left: 220px;
+            margin-top: 50px;
+        }
+
+        .centers-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ffe5d6;
+        }
+
+        .page-title {
+            color: #121212;
+            font-size: 25px;
+            text-align: center;
+        }
+
+        .add-btn {
+            background: #ff6a00;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background: #ff8533;
+            transform: translateY(-2px);
+        }
+
+        .centers-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .centers-table th {
+            background: #fff5f0;
+            color: #555;
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .centers-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+
+        .centers-table tr:hover {
+            background: #fafafa;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+
+        .edit-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #45a049;
+        }
+
+        .delete-btn {
+            background: #ff4444;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #ff3333;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 40px;
+            color: #ddd;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .centers-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <%- include('./partials/sidebar') %>
+            <%- include('./partials/header') %>
+
+                <main class="admin-content">
+                    <div class="centers-container">
+                        <div class="page-header">
+                            <h1 class="page-title">Rajasthan Centers</h1>
+                            <a href="/admin/rajasthan-centers/add" class="add-btn">
+                                <i class="fas fa-plus"></i> Add New Center
+                            </a>
+                        </div>
+
+                        <% if (rajcen && rajcen.length> 0) { %>
+                            <div class="table-responsive">
+                                <table class="centers-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Center Name</th>
+                                            <th>Address</th>
+                                            <th>Email</th>
+                                            <th>Contact</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% rajcen.forEach(function(center) { %>
+                                            <tr>
+                                                <td>
+                                                    <%= center.name %>
+                                                </td>
+                                                <td>
+                                                    <%= center.address %>
+                                                </td>
+                                                <td>
+                                                    <%= center.email %>
+                                                </td>
+                                                <td>
+                                                    <%= center.contact %>
+                                                </td>
+                                                <td>
+                                                    <div class="action-btns">
+                                                        <button class="edit-btn"
+                                                            onclick="window.location.href='/admin/rajasthan-centers/edit/<%= center._id %>'">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </button>
+                                                        <button class="delete-btn"
+                                                            onclick="deleteCenter('<%= center._id %>')">
+                                                            <i class="fas fa-trash"></i> Delete
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <% } else { %>
+                                <div class="empty-state">
+                                    <i class="fas fa-building"></i>
+                                    <p>No centers found. Add your first center!</p>
+                                </div>
+                                <% } %>
+                    </div>
+                </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function deleteCenter(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This center will be permanently deleted!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff6a00',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/admin/rajasthan-centers/delete/${id}`, {
+                        method: 'POST'
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                window.location.href = '/admin/rajasthan-centers';
+                            } else {
+                                throw new Error(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                icon: "error",
+                                title: error.message,
+                                toast: true,
+                                position: "top",
+                                showConfirmButton: false,
+                                timer: 1800,
+                                // timerProgressBar: true,
+                            });
+                        });
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="/assets/images/logo2.png">
+    <title>Trycam - Admin Panel</title>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #f5f5f5;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-content {
+            flex: 1;
+            margin-left: 225px;
+            margin-top: 70px;
+            padding: 30px;
+        }
+
+        .edit-profile-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            color: #555;
+            font-size: 21px;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffe5d6;
+        }
+
+        .profile-image-section {
+            position: relative;
+            width: 100px;
+            margin: 0 auto 30px;
+            cursor: pointer;
+        }
+
+        .profile-image-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .edit-overlay {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: #ff6a00;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border: 2px solid #fff;
+        }
+
+        .edit-overlay:hover {
+            transform: scale(1.1);
+            background: #ff8533;
+        }
+
+        .edit-overlay i {
+            color: white;
+            font-size: 14px;
+        }
+
+        .image-upload {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #ff6a00;
+            box-shadow: 0 0 0 2px rgba(255, 106, 0, 0.1);
+            outline: none;
+        }
+
+        .submit-btn {
+            background: #ff6a00;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #ff8533;
+            transform: translateY(-1px);
+        }
+
+        .password-match-error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+            padding: 5px;
+        }
+
+        .password-toggle:hover {
+            color: #ff6a00;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <%- include('./partials/sidebar') %>
+            <%- include('./partials/header') %>
+
+                <main class="admin-content">
+                    <div class="edit-profile-card">
+                        <h2 class="section-title">Edit Profile</h2>
+                        <form id="editProfileForm" onsubmit="return validateForm(event)" enctype="multipart/form-data"
+                            method="POST" action="/admin/edit-profile">
+                            <div class="profile-image-section" id="profileImageSection">
+                                <span class="remove-img" onclick="removeProfileImage()"
+                                    style="position:absolute; top:10px; right:6px; background:#ff8533;color:white; border-radius:50%; padding:2px 3px; cursor:pointer; font-size:12px;line-height: 1">
+                                    ✖
+                                </span>
+                                <img id="profilePreview" src="/uploads/<%=admin.image%>" alt="Profile"
+                                    class="profile-image-preview">
+                                <div class="edit-overlay" id="editImageBtn">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </div>
+                                <input type="file" id="imageInput" name="image" class="image-upload" accept="image/*">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" class="form-control" value="<%=admin.name%>" name="name"
+                                    placeholder="Enter your name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="oldPassword">Old Password</label>
+                                <div class="password-field">
+                                    <input type="password" id="oldPassword" name="oldPassword" placeholder="Password"
+                                        class="form-control">
+                                    <span class="password-toggle" onclick="togglePassword('oldPassword', this)">
+                                        <i class="far fa-eye"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <div class="password-field">
+                                    <input type="password" id="newPassword" name="newPassword" placeholder="Password"
+                                        class="form-control">
+                                    <span class="password-toggle" onclick="togglePassword('newPassword', this)">
+                                        <i class="far fa-eye"></i>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Save Changes</button>
+                        </form>
+                    </div>
+                </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Image upload handling..
+        const profileImageSection = document.getElementById('profileImageSection');
+        const editImageBtn = document.getElementById('editImageBtn');
+        const imageInput = document.getElementById('imageInput');
+        const profilePreview = document.getElementById('profilePreview');
+
+        editImageBtn.addEventListener('click', () => {
+            imageInput.click();
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    profilePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Password toggle functionality..
+        function togglePassword(inputId, element) {
+            const input = document.getElementById(inputId);
+            const icon = element.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Validate Form..
+        function validateForm(event) {
+            const oldPass = document.getElementById('oldPassword').value.trim();
+            const newPass = document.getElementById('newPassword').value.trim();
+
+            if (oldPass && !newPass) {
+                alert('Please enter your new password.');
+                document.getElementById('newPassword').focus();
+                event.preventDefault();
+                return false;
+            }
+
+            if (newPass && !oldPass) {
+                alert('Please enter your old password.');
+                document.getElementById('oldPassword').focus();
+                event.preventDefault();
+                return false;
+            }
+
+            return true;
+        }
+
+        // Remove Image..
+        function removeProfileImage() {
+            if (!confirm("Are you sure you want to remove your profile image?")) {
+                return;
+            }
+            fetch('/admin/remove-profile-image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector('.profile-image-preview').src = '/uploads/profile-image/admin.png';
+                        document.querySelector('.remove-img').style.display = 'none';
+                    }
+                }).then(window.location.href = "/admin/edit-profile");
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#editProfileForm").on("submit", function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+
+                $.ajax({
+                    url: "/admin/edit-profile",
+                    method: "POST",
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    success: function (response) {
+                        Swal.fire({
+                            icon: "success",
+                            title: response.message,
+                            toast: true,
+                            position: "top",
+                            showConfirmButton: false,
+                            timer: 1500,
+                            // timerProgressBar: true,
+                        }).then(() => {
+                            window.location.href = "/admin/edit-profile"
+                        });
+
+                    },
+                    error: function (xhr) {
+                        const err = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: "error",
+                            title: err.message,
+                            toast: true,
+                            position: "top",
+                            showConfirmButton: false,
+                            timer: 1800,
+                            // timerProgressBar: true,
+                        });
+
+                    },
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

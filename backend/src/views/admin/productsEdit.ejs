@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="/assets/images/logo2.png">
+    <title>Trycam - Admin Panel</title>
+    <style>
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-content {
+            flex: 1;
+            margin-left: 225px;
+            margin-top: 50px;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            color: #555;
+            font-size: 22px;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ffe5d6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #ff6a00;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 106, 0, 0.1);
+        }
+
+        .image-section {
+            background: #fff5f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .current-image {
+            max-width: 300px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .image-upload {
+            display: none;
+        }
+
+        .change-image-btn {
+            background: #ff6a00;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .change-image-btn:hover {
+            background: #ff8533;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .update-btn {
+            background: #ff6a00;
+            color: white;
+            flex: 1;
+        }
+
+        .update-btn:hover {
+            background: #ff8533;
+            transform: translateY(-2px);
+        }
+
+        .cancel-btn {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .cancel-btn:hover {
+            background: #e5e5e5;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <%- include('./partials/sidebar') %>
+            <%- include('./partials/header') %>
+
+                <main class="admin-content">
+                    <div class="form-container">
+                        <h2 class="page-title">Edit Product</h2>
+
+                        <form id="editForm" onsubmit="handleSubmit(event)">
+                            <div class="form-group">
+                                <label class="form-label" for="name">Product Name *</label>
+                                <input type="text" id="name" name="name" class="form-control"
+                                    value="<%= product.name %>" required minlength="3" maxlength="100">
+                                <div class="error-message" id="nameError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="price">Price (₹) *</label>
+                                <input type="number" id="price" name="price" class="form-control"
+                                    value="<%= product.price %>" required min="0" step="0.01">
+                                <div class="error-message" id="priceError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="offerPrice">Offer Price (₹) *</label>
+                                <input type="number" id="offerPrice" name="offerPrice" class="form-control"
+                                    value="<%= product.offerPrice %>" min="0" step="0.01">
+                                <div class="error-message" id="offerPriceError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="description">Description *</label>
+                                <textarea id="description" name="description" class="form-control" required rows="4"
+                                    minlength="10" maxlength="500"><%= product.description %></textarea>
+                                <div class="error-message" id="descriptionError"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Product Image</label>
+                                <div class="image-section">
+                                    <img src="/uploads/<%= product.image %>" alt="Current Product Image"
+                                        class="current-image" id="imagePreview">
+                                    <button type="button" class="change-image-btn"
+                                        onclick="document.getElementById('image').click()">
+                                        <i class="fas fa-camera"></i> Change Image
+                                    </button>
+                                    <input type="file" id="image" name="image" accept="image/*" class="image-upload">
+                                </div>
+                                <div class="error-message" id="imageError"></div>
+                            </div>
+
+                            <div class="btn-group">
+                                <button type="submit" class="btn update-btn">
+                                    <i class="fas fa-save"></i> Update Product
+                                </button>
+                                <button type="button" class="btn cancel-btn"
+                                    onclick="window.location.href='/admin/products'">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+
+        imageInput.addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+
+            try {
+                const response = await fetch('/admin/products/edit/<%= product._id %>', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    window.location.href = '/admin/products';
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 1800,
+                    // timerProgressBar: true,
+                });
+            }
+        }
+
+        // Real-time validation
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', function () {
+                const errorElement = document.getElementById(`${this.id}Error`);
+                if (this.validity.valid) {
+                    errorElement.style.display = 'none';
+                } else {
+                    errorElement.style.display = 'block';
+                    errorElement.textContent = this.validationMessage;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

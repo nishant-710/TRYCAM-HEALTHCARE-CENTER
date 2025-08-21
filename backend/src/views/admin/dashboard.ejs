@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <link rel="icon" type="image/png" href="/assets/images/logo2.png">
+    <title>Trycam - Admin Panel</title>
+    <style>
+        body {
+            background: #f5f5f5;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-content {
+            flex: 1;
+            margin-left: 220px;
+            margin-top: 50px;
+            padding: 18px;
+            background: #f8f9fa;
+        }
+
+        .dashboard-welcome {
+            background: linear-gradient(135deg, #ff6a00, #ff8533);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(255, 106, 0, 0.2);
+        }
+
+        .welcome-text {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            position: absolute;
+            right: -15px;
+            bottom: -15px;
+            font-size: 80px;
+            opacity: 0.1;
+            color: #ff6a00;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.2);
+            opacity: 0.15;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-trend {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .quick-actions {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #fff5f0;
+            color: #ff6a00;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: #ff6a00;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .action-label {
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @keyframes countUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animated {
+            animation: countUp 0.8s ease forwards;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout">
+        <%- include('./partials/sidebar') %>
+            <%- include('./partials/header') %>
+
+                <main class="admin-content">
+                    <div class="dashboard-welcome">
+                        <h1 class="welcome-text">Welcome back, <%= admin.name %>!</h1>
+                        <p>Here's what's happening with your store today</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-box stat-icon"></i>
+                            <div class="stat-label">Total Products</div>
+                            <div class="stat-value" id="productsCount">0</div>
+                            <div class="stat-trend">
+                                <i class="fas fa-sync"></i> Active
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <i class="fas fa-building stat-icon"></i>
+                            <div class="stat-label">Rajasthan Centers</div>
+                            <div class="stat-value" id="centersCount">0</div>
+                            <div class="stat-trend">
+                                <i class="fas fa-sync"></i> Active
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <i class="fas fa-quote-right stat-icon"></i>
+                            <div class="stat-label">Testimonials</div>
+                            <div class="stat-value" id="testimonialsCount">0</div>
+                            <div class="stat-trend">
+                                <i class="fas fa-sync"></i> Active
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <i class="fas fa-photo-video stat-icon"></i>
+                            <div class="stat-label">Media Files</div>
+                            <div class="stat-value" id="mediaCount">0</div>
+                            <div class="stat-trend">
+                                <i class="fas fa-sync"></i> Active
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+                        <h2>Quick Actions</h2>
+                        <div class="action-grid">
+                            <a href="/admin/products/add" class="action-btn">
+                                <i class="fas fa-plus action-icon"></i>
+                                <span class="action-label">Add Product</span>
+                            </a>
+                            <a href="/admin/rajasthan-centers/add" class="action-btn">
+                                <i class="fas fa-building action-icon"></i>
+                                <span class="action-label">Add Center</span>
+                            </a>
+                            <a href="/admin/media/add" class="action-btn">
+                                <i class="fas fa-cloud-upload-alt action-icon"></i>
+                                <span class="action-label">Upload Media</span>
+                            </a>
+                            <a href="/admin/testimonials/add" class="action-btn">
+                                <i class="fas fa-comment-alt action-icon"></i>
+                                <span class="action-label">Upload Testimonial</span>
+                            </a>
+                        </div>
+                    </div>
+                </main>
+    </div>
+
+    <script>
+        function animateValue(element, start, end, duration) {
+            element.classList.add('animated');
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const current = Math.floor(progress * (end - start) + start);
+                element.textContent = current.toLocaleString();
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        // Initialize counters with animation
+        document.addEventListener('DOMContentLoaded', () => {
+            animateValue(document.getElementById('productsCount'), 0, "<%= products %>", 1000);
+            animateValue(document.getElementById('centersCount'), 0, "<%= rajcen %>", 1000);
+            animateValue(document.getElementById('testimonialsCount'), 0, "<%= testimonials %>", 1000);
+            animateValue(document.getElementById('mediaCount'), 0, "<%= media %>", 1000);
+        });
+    </script>
+</body>
+
+</html>

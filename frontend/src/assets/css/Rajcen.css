@@ -1,0 +1,108 @@
+/* Orange Theme Utility Classes */
+.text-orange {
+  color: #ff6a00;
+}
+.bg-orange {
+  background-color: #ff6a00 !important;
+}
+
+.center-heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: 800;
+  color: #333;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  margin: 0;
+  padding-top: 30px;
+}
+
+.center-heading .center-logo {
+  width: 55px;
+  height: auto;
+  display: block;
+  position: relative;
+  top: -13px;
+}
+
+.centers-container {
+  max-width: 950px;
+  margin: 50px auto;
+  padding: 30px;
+  background: linear-gradient(135deg, #ffffff, #fff0e0);
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.centers-container h1 {
+  text-align: center;
+  color: #ff7a00;
+  margin-bottom: 30px;
+  font-size: 32px;
+  text-shadow: 1px 1px 3px rgba(255, 122, 0, 0.2);
+}
+
+.center-box {
+  background-color: #fff5eb;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  padding: 18px 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  width: 300%;
+  max-width: 890px;
+}
+
+.no-centers {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.center-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.center-title {
+  font-size: 1.25rem;
+  color: #000000;
+  font-weight: 600;
+  margin: 0;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.center-title:hover {
+  color: #ff7a00;
+}
+
+.center-details {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.4s ease-in-out;
+}
+
+.center-box .center-details {
+  margin-top: 10px;
+}
+
+.center-box .center-details.open,
+.center-box .center-details {
+  max-height: 1000px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.center-details.show {
+  display: block;
+}
+
+.center-details p {
+  margin: 6px 0;
+}

@@ -1,0 +1,100 @@
+.notfound-root {
+  min-height: calc(100vh - 0px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #fff 0%, #fffaf6 100%);
+  font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  color: #222;
+}
+
+.notfound-card {
+  width: 100%;
+  max-width: 980px;
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  padding: 28px;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  border-left: 6px solid #ff6a00;
+}
+
+.notfound-visual {
+  flex: 0 0 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notfound-svg {
+  width: 160px;
+  height: 160px;
+  display: block;
+}
+
+.notfound-content {
+  flex: 1;
+}
+
+.notfound-content h1 {
+  margin: 0 0 8px 0;
+  font-size: 1.8rem;
+  color: #111;
+}
+
+.notfound-content p {
+  margin: 0 0 18px 0;
+  color: #555;
+  line-height: 1.5;
+  max-width: 46rem;
+}
+
+/* Buttons */
+.notfound-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  padding: 10px 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+/* Primary */
+.btn-primary {
+  background: linear-gradient(90deg, #ff6a00, #ff9500);
+  color: white;
+  box-shadow: 0 6px 18px rgba(255, 106, 0, 0.18);
+}
+
+/* Secondary */
+.btn-secondary {
+  background: #f2f3f5;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Responsive */
+@media (max-width: 760px) {
+  .notfound-card {
+    flex-direction: column;
+    padding: 22px;
+    gap: 18px;
+    text-align: center;
+  }
+  .notfound-visual {
+    order: -1;
+  }
+}
