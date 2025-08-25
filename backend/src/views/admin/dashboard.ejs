@@ -16,14 +16,103 @@
         .admin-layout {
             display: flex;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
         .admin-content {
             flex: 1;
-            margin-left: 220px;
-            margin-top: 50px;
+            margin-left: 225px;
+            margin-top: 70px;
             padding: 18px;
             background: #f8f9fa;
+            position: relative;
+            z-index: 1;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Add responsive styles */
+        @media (max-width: 992px) {
+            .admin-content {
+                margin-left: 0;
+                padding: 15px;
+                margin-top: 60px;
+                width: 100%;
+            }
+
+            .dashboard-welcome {
+                padding: 20px;
+            }
+
+            .welcome-text {
+                font-size: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+            }
+
+            .stat-value {
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-card {
+                padding: 20px;
+            }
+
+            .stat-icon {
+                font-size: 60px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-welcome {
+                padding: 15px;
+            }
+
+            .welcome-text {
+                font-size: 18px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .quick-actions {
+                padding: 20px;
+            }
+
+            .action-btn {
+                padding: 12px;
+            }
+
+            .action-icon {
+                font-size: 20px;
+            }
         }
 
         .dashboard-welcome {

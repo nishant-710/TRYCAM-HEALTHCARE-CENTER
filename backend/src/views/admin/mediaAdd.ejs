@@ -16,7 +16,8 @@
         .admin-content {
             flex: 1;
             margin-left: 225px;
-            margin-top: 50px;
+            margin-top: 70px;
+            transition: margin-left 0.3s ease;
         }
 
         .media-container {
@@ -168,6 +169,91 @@
             background: #ccc;
             cursor: not-allowed;
             transform: none;
+        }
+
+        /* Add responsive styles */
+        @media (max-width: 992px) {
+            .admin-content {
+                margin-left: 0;
+                margin-top: 60px;
+                padding: 20px;
+            }
+
+            .media-container {
+                padding: 20px;
+            }
+
+            .upload-section {
+                width: 80%;
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-content {
+                padding: 15px;
+            }
+
+            .media-container {
+                padding: 15px;
+            }
+
+            .upload-section {
+                width: 90%;
+                padding: 25px;
+            }
+
+            .preview-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .select-title {
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-content {
+                padding: 10px;
+            }
+
+            .media-container {
+                padding: 12px;
+            }
+
+            .page-title {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+
+            .upload-section {
+                width: 100%;
+                padding: 20px;
+            }
+
+            .upload-icon {
+                font-size: 28px;
+            }
+
+            .upload-text {
+                font-size: 13px;
+            }
+
+            .preview-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 10px;
+            }
+
+            .title-dropdown {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .submit-btn {
+                padding: 12px 16px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>

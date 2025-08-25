@@ -16,7 +16,8 @@
         .admin-content {
             flex: 1;
             margin-left: 225px;
-            margin-top: 50px;
+            margin-top: 70px;
+            transition: margin-left 0.3s ease;
         }
 
         .edit-container {
@@ -110,6 +111,69 @@
 
         .cancel-btn:hover {
             background: #e5e5e5;
+        }
+
+        /* Add responsive styles */
+        @media (max-width: 992px) {
+            .admin-content {
+                margin-left: 0;
+                margin-top: 60px;
+                padding: 20px;
+            }
+
+            .edit-container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-content {
+                padding: 15px;
+            }
+
+            .edit-container {
+                padding: 15px;
+            }
+
+            .media-preview {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-content {
+                padding: 10px;
+            }
+
+            .edit-container {
+                padding: 12px;
+                border-radius: 8px;
+            }
+
+            .page-title {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+
+            .title-dropdown {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .btn {
+                padding: 10px;
+                font-size: 14px;
+            }
         }
     </style>
 </head>

@@ -18,6 +18,7 @@
             margin-left: 225px;
             margin-top: 70px;
             padding: 30px;
+            transition: margin-left 0.3s ease;
         }
 
         .page-title {
@@ -92,6 +93,88 @@
             text-align: center;
             padding: 40px;
             color: #666;
+        }
+
+        /* Add responsive styles */
+        @media (max-width: 992px) {
+            .admin-content {
+                margin-left: 0;
+                padding: 20px;
+                margin-top: 60px;
+            }
+
+            .titles-container {
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .admin-content {
+                padding: 15px;
+            }
+
+            .titles-container {
+                padding: 15px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .titles-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .action-btns {
+                flex-wrap: nowrap;
+            }
+
+            .add-btn,
+            .edit-btn,
+            .delete-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-content {
+                padding: 10px;
+            }
+
+            .titles-container {
+                padding: 12px;
+                border-radius: 8px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+
+            .titles-table th,
+            .titles-table td {
+                padding: 12px 10px;
+            }
+
+            .action-btns {
+                gap: 6px;
+            }
+
+            .add-btn,
+            .edit-btn,
+            .delete-btn {
+                padding: 5px 10px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
