@@ -7,7 +7,7 @@ const connectDB = require("./config/db");
 const routes = require("./routes");
 
 const app = express();
-const PORT = process.env.ADMIN_PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // DB Connection
 connectDB();
